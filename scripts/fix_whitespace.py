@@ -37,7 +37,10 @@ def fix_whitespace_issues(file_path):
 
 
 def process_directory(directory):
-    """u6307u5b9au3055u308cu305fu30c7u30a3u30ecu30afu30c8u30eau5185u306eu30d5u30a1u30a4u30ebu306eu7a7au767du554fu984cu3092u4feeu6b63u3059u308b"""
+    """
+    u6307u5b9au3055u308cu305fu30c7u30a3u30ecu30afu30c8u30eau5185u306e
+    u30d5u30a1u30a4u30ebu306eu7a7au767du554fu984cu3092u4feeu6b63u3059u308b
+    """
     count = 0
     for root, _, files in os.walk(directory):
         for file in files:

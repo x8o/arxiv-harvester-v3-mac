@@ -150,7 +150,13 @@ class DatabaseManager:
         """
         return self.get_papers()
 
-    def get_papers(self, limit: int = None, offset: int = 0, order_by: str = "published_date", order_direction: str = "ASC") -> List[Dict[str, Any]]:
+    def get_papers(
+        self, 
+        limit: int = None, 
+        offset: int = 0, 
+        order_by: str = "published_date", 
+        order_direction: str = "ASC"
+    ) -> List[Dict[str, Any]]:
         """Retrieve papers with pagination support.
 
         Args:

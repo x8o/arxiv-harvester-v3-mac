@@ -1,7 +1,8 @@
 [flake8]
-max-line-length = 150
+max-line-length = 127
 exclude = .git,__pycache__,build,dist
-# E501 is now set to 150 characters instead of default 79
-# E128 is now ignored (continuation line under-indented for visual indent)
-ignore = E128
+# E501 is now adjusted to 127 characters to match GitHub Actions configuration
+# E128 is ignored (continuation line under-indented for visual indent)
+# C901 is ignored (function is too complex)
+ignore = E128, C901
 # Other important rules are still enforced
