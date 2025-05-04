@@ -284,12 +284,12 @@ class TestDatabaseManager:
         additional_papers = []
         for i in range(10):
             paper = {
-                'id': f'http://arxiv.org/abs/{2104+i}',
+                'id': f'http://arxiv.org/abs/{2104 + i}',
                 'title': f'Additional Paper {i}',
                 'summary': f'This is abstract {i}',
                 'authors': [f'Author {i}'],
-                'published_date': f'2021-05-{i+1:02d}T00:00:00Z',
-                'pdf_url': f'http://arxiv.org/pdf/{2104+i}'
+                'published_date': f'2021-05-{i + 1:02d}T00:00:00Z',
+                'pdf_url': f'http://arxiv.org/pdf/{2104 + i}'
             }
             additional_papers.append(paper)
 

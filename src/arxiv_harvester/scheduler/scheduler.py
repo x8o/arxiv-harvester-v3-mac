@@ -43,7 +43,9 @@ class Scheduler:
         # State management
         self.state_file = None
 
-    def set_search_parameters(self, query: str, categories: List[str] = None, max_results: int = 50):
+    def set_search_parameters(
+        self, query: str, categories: List[str] = None, max_results: int = 50
+    ) -> None:
         """Set the search parameters for API queries.
 
         Args:

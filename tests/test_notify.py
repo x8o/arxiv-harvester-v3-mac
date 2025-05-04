@@ -233,12 +233,12 @@ class TestSlackNotifier:
         """Test limiting the number of papers in a message."""
         # Create many papers
         many_papers = [{
-            'id': f'http://arxiv.org/abs/{2104+i}',
+            'id': f'http://arxiv.org/abs/{2104 + i}',
             'title': f'Paper {i}',
             'summary': f'Abstract {i}',
             'authors': [f'Author {i}'],
-            'published_date': f'2021-04-{i+1:02d}T00:00:00Z',
-            'pdf_url': f'http://arxiv.org/pdf/{2104+i}'
+            'published_date': f'2021-04-{i + 1:02d}T00:00:00Z',
+            'pdf_url': f'http://arxiv.org/pdf/{2104 + i}'
         } for i in range(20)]
 
         # Format with a limit

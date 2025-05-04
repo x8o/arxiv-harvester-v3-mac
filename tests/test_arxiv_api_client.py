@@ -188,8 +188,8 @@ class TestArxivApiClient:
         mock_get.side_effect = side_effect
 
         results = api_client.search(query='natural language processing',
-                                     sort_by='submittedDate',
-                                     sort_order='descending')
+                                   sort_by='submittedDate',
+                                   sort_order='descending')
 
         # Verify the API was called with the correct parameters
         mock_get.assert_called_once()

@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 150
+exclude = .git,__pycache__,build,dist
+# E501 is now set to 150 characters instead of default 79
+# E128 is now ignored (continuation line under-indented for visual indent)
+ignore = E128
+# Other important rules are still enforced

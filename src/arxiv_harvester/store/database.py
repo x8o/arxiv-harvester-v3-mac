@@ -4,11 +4,10 @@ Provides functionality for storing and retrieving arXiv papers in a SQLite datab
 """
 
 import sqlite3
-import json
 import os
 import shutil
 from datetime import datetime
-from typing import Dict, List, Optional, Any, Union, Tuple
+from typing import Dict, List, Optional, Any
 
 
 class DatabaseManager:
@@ -221,7 +220,7 @@ class DatabaseManager:
         # If not found, try with the full URL format
         if row is None:
             cursor.execute("SELECT * FROM papers WHERE id = ?",
-                         (f"http://arxiv.org/abs/{paper_id}",))
+                          (f"http://arxiv.org/abs/{paper_id}",))
             row = cursor.fetchone()
 
         if row is None:

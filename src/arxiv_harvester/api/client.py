@@ -38,9 +38,11 @@ class ArxivApiClient:
 
         self.last_request_time = time.time()
 
-    def search(self, query: str, category: str = None, start_date: datetime = None,
-               end_date: datetime = None, max_results: int = 10,
-               sort_by: str = "relevance", sort_order: str = "ascending") -> List[Dict[str, Any]]:
+    def search(
+        self, query: str, category: str = None, start_date: datetime = None,
+        end_date: datetime = None, max_results: int = 10,
+        sort_by: str = "relevance", sort_order: str = "ascending"
+    ) -> List[Dict[str, Any]]:
         """Search for papers on arXiv based on given parameters.
 
         Args:
@@ -49,14 +51,16 @@ class ArxivApiClient:
             start_date: Start date for search range
             end_date: End date for search range
             max_results: Maximum number of results to return
-            sort_by: Field to sort by ('relevance', 'lastUpdatedDate', 'submittedDate')
+            sort_by: Field to sort by ('relevance', 'lastUpdatedDate',
+                'submittedDate')
             sort_order: Sort direction ('ascending' or 'descending')
 
         Returns:
             List of dictionaries containing paper information
 
         Raises:
-            Exception: If the API request fails or the response cannot be parsed
+            Exception: If the API request fails or the response cannot be
+                parsed
         """
         # Enforce rate limiting
         self._enforce_rate_limit()
@@ -154,12 +158,16 @@ class ArxivApiClient:
                         'summary': self._get_xml_text(
                             entry, "atom:summary", ns
                         ),
-                        'authors': [self._get_xml_text(author, ".", ns)
-                                    for author in entry.findall("atom:author", ns)],
+                        'authors': [
+                            author.findtext('./atom:name', namespaces=ns).strip()
+                            for author in entry.findall("atom:author", ns)
+                        ],
                         'published_date': self._get_xml_text(entry, "atom:published", ns),
-                        'pdf_url': next((link.attrib.get('href', '')
-                                      for link in entry.findall("atom:link", ns)
-                                      if 'pdf' in link.attrib.get('href', '')), '')
+                        'pdf_url': next((
+                            link.attrib.get('href', '')
+                            for link in entry.findall("atom:link", ns)
+                            if 'pdf' in link.attrib.get('href', '')
+                        ), '')
                     }
 
                 results.append(paper)
@@ -174,9 +182,13 @@ class ArxivApiClient:
         if element is None:
             return ""
         result = element.find(xpath, ns)
-        return result.text.strip() if result is not None and result.text else ""
+        if result is not None and result.text:
+            return result.text.strip()
+        return ""
 
-    def get_paper_by_id(self, paper_id: str) -> Dict[str, Any]:
+    def get_paper_by_id(
+        self, paper_id: str
+    ) -> Dict[str, Any]:
         """Retrieve a specific paper by its arXiv ID.
 
         Args:

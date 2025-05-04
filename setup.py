@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name="arxiv-harvester",
     version="0.1.0",
-    description="Tool for extracting and processing academic papers from arXiv.org",
+    description=("Tool for extracting and processing"
+                 " academic papers from arXiv.org"),
     author="AI Team",
     author_email="ai@example.com",
     packages=find_packages(where="src"),
