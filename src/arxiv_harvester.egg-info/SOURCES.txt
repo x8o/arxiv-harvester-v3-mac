@@ -1,0 +1,11 @@
+README.md
+setup.py
+src/arxiv_harvester/__init__.py
+src/arxiv_harvester.egg-info/PKG-INFO
+src/arxiv_harvester.egg-info/SOURCES.txt
+src/arxiv_harvester.egg-info/dependency_links.txt
+src/arxiv_harvester.egg-info/requires.txt
+src/arxiv_harvester.egg-info/top_level.txt
+src/arxiv_harvester/api/__init__.py
+src/arxiv_harvester/api/client.py
+tests/test_arxiv_api_client.py

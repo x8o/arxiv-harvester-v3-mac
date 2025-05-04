@@ -1,0 +1,39 @@
+{
+  "feed": {
+    "entry": [
+      {
+        "id": "http://arxiv.org/abs/2104.12345",
+        "title": "Sample Paper Title: Deep Learning Approaches",
+        "summary": "This is a sample abstract discussing deep learning approaches and their applications in various fields. The paper presents a comprehensive review of recent advancements.",
+        "author": [
+          { "name": "Author One" },
+          { "name": "Author Two" },
+          { "name": "Author Three" }
+        ],
+        "published": "2021-04-15T00:00:00Z",
+        "updated": "2021-04-16T12:00:00Z",
+        "category": [{ "term": "cs.AI" }, { "term": "cs.LG" }],
+        "link": [
+          { "href": "http://arxiv.org/abs/2104.12345", "rel": "alternate", "type": "text/html" },
+          { "href": "http://arxiv.org/pdf/2104.12345", "rel": "related", "type": "application/pdf" }
+        ]
+      },
+      {
+        "id": "http://arxiv.org/abs/2104.54321",
+        "title": "Another Research Paper: Machine Learning in Healthcare",
+        "summary": "This paper explores the application of machine learning techniques in healthcare settings, focusing on diagnostic accuracy and patient outcome prediction.",
+        "author": [
+          { "name": "Researcher A" },
+          { "name": "Researcher B" }
+        ],
+        "published": "2021-04-14T00:00:00Z",
+        "updated": "2021-04-15T09:30:00Z",
+        "category": [{ "term": "cs.AI" }, { "term": "stat.ML" }],
+        "link": [
+          { "href": "http://arxiv.org/abs/2104.54321", "rel": "alternate", "type": "text/html" },
+          { "href": "http://arxiv.org/pdf/2104.54321", "rel": "related", "type": "application/pdf" }
+        ]
+      }
+    ]
+  }
+}

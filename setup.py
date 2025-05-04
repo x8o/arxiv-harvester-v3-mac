@@ -7,7 +7,7 @@ setup(
     author="AI Team",
     author_email="ai@example.com",
     packages=find_packages(where="src"),
-    package_dir={"":"src"},
+    package_dir={"": "src"},
     install_requires=[
         "requests>=2.28.2",
         "pypdf2>=3.0.1",
