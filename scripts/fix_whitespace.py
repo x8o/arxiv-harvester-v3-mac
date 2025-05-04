@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """
-PEP 8u306eu30b9u30bfu30a4u30ebu554fu984cu3092u81eau52d5u4feeu6b63u3059u308bu305fu3081u306e
-u30e6u30fcu30c6u30a3u30eau30c6u30a3u30b9u30afu30eau30d7u30c8u3002
-u4e3bu306bu4ee5u4e0bu306eu554fu984cu3092u4feeu6b63u3057u307eu3059uff1a
-- u7a7au767du884cu306eu7a7au767du6587u5b57u9664u53bb (W293)
-- u884cu672bu306eu7a7au767du9664u53bb (W291)
-- u30d5u30a1u30a4u30ebu672bu5c3eu306eu4f59u5206u306au7a7au884cu4feeu6b63 (W391)
+PEP 8のスタイル問題を自動修正するための
+ユーティリティスクリプト。
+主に以下の問題を修正します：
+- 空白行の空白文字除去 (W293)
+- 行末の空白除去 (W291)
+- ファイル末尾の余分な空行修正 (W391)
 """
 
 import os
@@ -13,7 +13,7 @@ import sys
 
 
 def fix_whitespace_issues(file_path):
-    """u30d5u30a1u30a4u30ebu5185u306eu7a7au767du95a2u9023u306eu554fu984cu3092u4feeu6b63u3059u308b"""
+    """ファイル内の空白関連の問題を修正する"""
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
@@ -38,8 +38,8 @@ def fix_whitespace_issues(file_path):
 
 def process_directory(directory):
     """
-    u6307u5b9au3055u308cu305fu30c7u30a3u30ecu30afu30c8u30eau5185u306e
-    u30d5u30a1u30a4u30ebu306eu7a7au767du554fu984cu3092u4feeu6b63u3059u308b
+    指定されたディレクトリ内の
+    ファイルの空白問題を修正する
     """
     count = 0
     for root, _, files in os.walk(directory):
@@ -57,7 +57,7 @@ def process_directory(directory):
 
 
 def main():
-    """u30e1u30a4u30f3u95a2u6570"""
+    """メイン関数"""
     if len(sys.argv) > 1:
         target = sys.argv[1]
         if os.path.isfile(target) and target.endswith(".py"):
@@ -69,7 +69,7 @@ def main():
         else:
             print(f"Error: {target} is not a Python file or directory")
     else:
-        # u30c7u30d5u30a9u30ebu30c8u306fu30abu30ecu30f3u30c8u30c7u30a3u30ecu30afu30c8u30ea
+        # デフォルトはカレントディレクトリ
         root_dir = os.getcwd()
         fixed = process_directory(root_dir)
         print(f"Fixed {fixed} files in {root_dir}")
