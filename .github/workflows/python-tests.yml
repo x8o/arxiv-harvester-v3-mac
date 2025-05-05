@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov flake8
+        pip install pytest pytest-cov flake8 pytest-html
         pip install -e .
         
     - name: Lint with flake8
@@ -40,15 +40,143 @@ jobs:
         
     - name: Test with pytest and coverage
       run: |
-        pytest --cov=src/arxiv_harvester tests/
-        
-    - name: Upload test coverage
+        mkdir -p test-results
+        pytest --cov=src/arxiv_harvester --cov-report=xml:coverage.xml --cov-report=html:coverage_html --html=test-results/report.html --self-contained-html tests/
+      
+    - name: Upload test coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
+        file: ./coverage.xml
         fail_ci_if_error: false
         verbose: true
+        
+    - name: Upload test coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report-${{ matrix.python-version }}
+        path: coverage_html/
+        retention-days: 14
+        
+    - name: Upload test report
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-report-${{ matrix.python-version }}
+        path: test-results/
+        retention-days: 14
+        
+    - name: Check test results
+      id: test-results
+      run: |
+        if [ -f test-results/report.html ]; then
+          echo "::set-output name=status::success"
+        else
+          echo "::set-output name=status::failure"
+        fi
 
+  # PR へのコメント付与
+  comment-pr:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        
+      - name: Find test results
+        run: |
+          echo "## テスト実行結果 📊" > comment.md
+          echo "" >> comment.md
+          echo "### Python バージョン別テスト状況" >> comment.md
+          echo "| バージョン | 状態 |" >> comment.md
+          echo "| --- | --- |" >> comment.md
+          
+          for version in 3.9 3.10 3.11 3.12; do
+            if [ -d "test-report-$version" ]; then
+              echo "| Python $version | ✅ 成功 |" >> comment.md
+            else
+              echo "| Python $version | ❌ 失敗 |" >> comment.md
+            fi
+          done
+          
+          echo "" >> comment.md
+          echo "詳細なテスト結果と網羅率レポートはアーティファクトをご確認ください。" >> comment.md
+      
+      - name: Comment on PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const comment = fs.readFileSync('comment.md', 'utf8');
+            const issue_number = context.issue.number;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: comment
+            });
+
+  # Slack通知ジョブ
   notify:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check workflow result
+        id: check
+        run: |
+          if [ "${{ needs.test.result }}" == "success" ]; then
+            echo "::set-output name=status::success"
+            echo "::set-output name=color::#36a64f"
+            echo "::set-output name=icon::white_check_mark"
+            echo "::set-output name=title::テスト成功"
+          else
+            echo "::set-output name=status::failure"
+            echo "::set-output name=color::#ff0000"
+            echo "::set-output name=icon::x"
+            echo "::set-output name=title::テスト失敗"
+          fi
+
+      - name: Send notification to Slack
+        if: secrets.SLACK_WEBHOOK_URL != ''
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ steps.check.outputs.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          text: |
+            ${{ steps.check.outputs.title }} - ${{ github.repository }}
+            ${{ github.workflow }} ワークフロー (${{ github.event_name }})
+            実行者: ${{ github.actor }}
+            コミット: ${{ github.sha }}
+            詳細: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+
+  # 定期実行時のarXiv論文収集処理
+  harvest-papers:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && needs.test.result == 'success'
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          
+      - name: Run arXiv harvester
+        run: |
+          python -m arxiv_harvester.run --force-run
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
     needs: test
     if: always()
     runs-on: ubuntu-latest
