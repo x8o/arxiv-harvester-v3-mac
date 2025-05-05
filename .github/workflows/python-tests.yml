@@ -138,7 +138,7 @@ jobs:
           fi
 
       - name: Send notification to Slack
-        if: secrets.SLACK_WEBHOOK_URL != ''
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ steps.check.outputs.status }}
