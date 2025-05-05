@@ -176,29 +176,3 @@ jobs:
           python -m arxiv_harvester.run --force-run
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-    needs: test
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-    - name: Notify Slack on Success
-      if: ${{ needs.test.result == 'success' }}
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_CHANNEL: arxiv-ci
-        SLACK_COLOR: good
-        SLACK_MESSAGE: ':white_check_mark: テスト成功: arXiv Harvester'
-        SLACK_TITLE: テスト成功
-        MSG_MINIMAL: true
-        
-    - name: Notify Slack on Failure
-      if: ${{ needs.test.result != 'success' }}
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_CHANNEL: arxiv-ci
-        SLACK_COLOR: danger
-        SLACK_MESSAGE: ':rotating_light: テスト失敗: arXiv Harvester'
-        SLACK_TITLE: テスト失敗
-        MSG_MINIMAL: false
